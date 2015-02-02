@@ -11,10 +11,14 @@ function app(){
         //js
         {url: "./bower_components/jquery/dist/jquery.min.js"},
         {url: "./bower_components/lodash/dist/lodash.min.js"}
-        // {url: "./bower_components/backbone/backbone.js"}
+         {url: "./bower_components/backbone/backbone.js"}
     ).then(function(){
         document.querySelector("html").style.opacity = 1;
-        // start app?
+
+var api_key = "f15u1lv3m0cck4st1213vuqk";
+
+ window.es = new EtsyShop (api_key);
+
     })
 
 }
