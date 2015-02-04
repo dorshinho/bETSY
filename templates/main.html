@@ -1,0 +1,6 @@
+<% _.forEach(listing, function(l) { %>
+<a href="#<%= l.listing_id %>">
+    <div class="views">Views: <%= l.views %></div>
+    <div class="price"><%= l.price %> <%= l.currency_code %></div>
+</a>
+<% }); %>
