@@ -1,39 +1,78 @@
 ;
 (function() {
 
-    function EtsyShop(api_key) {
+    function EtsyClient(api_key) {
         this.api_key = api_key;
-        this.listings = [];
 
         var self = this;
         var etsyRouter = Backbone.Router.extend({
             routes: {
-                ":listing_id": "getListingInfo",
-
+                "listing/:id": "details",
+                /// ...
+                "*default": "home" // default route if nothing above matches
             },
-            getListingInfo: function(listing_id) {
-                self.getListingInfo(listing_id);
-                alert();
-                document.querySelector(".main").style.opacity = "1";
+            home: function() {
+                self.drawHome();
             },
+            details: function(id) {
+                self.drawDetails(id)
 
+                // ... self.drawDetails(id)
+            },
             initialize: function() {
                 Backbone.history.start();
             }
         })
         var router = new etsyRouter();
-
-        this.draw();
     };
 
 
-    EtsyShop.prototype = {
-        URLs: {
-            listings: "https://openapi.etsy.com/v2/listings/active.js?callback=$&api_key=f15u1lv3m0cck4st1213vuqk"
-        },
-        draw: function(){}
-    }
+    EtsyClient.prototype = {
+        drawHome: function() {
+            // 1. setup url
+            var url = "https://openapi.etsy.com/v2/listings/active.js?includes=Images&api_key=" + this.api_key + "&callback=?";
+            // 2. make the request to Etsy and to load the template
+            var etsyPromise = $.getJSON(url).then(function(d) {
+                    return d
+                })
+                /// load template
+            var template = "./templates/search.html"
+            var templatePromise = $.get(template).then(function(d) {
+                return d
+            })
 
-    window.EtsyShop = EtsyShop;
+            // 3. write to DOM
+            $.when(etsyPromise, templatePromise).then(function(data, html) {
+                var templatingFn = _.template(html)
+                document.body.innerHTML = templatingFn(data)
+            })
+        },
+        drawDetails: function(id) {
+            // 1. setup url
+            var url = "https://openapi.etsy.com/v2/listings/" + id + ".js?includes=Images&api_key=" + this.api_key + "&callback=?";
+            console.log(url)
+
+
+            var etsyPromise = $.getJSON(url).then(function(d) {
+                return d
+            })
+            var template = "./templates/search.html"
+            var templatePromise = $.get(template).then(function(d) {
+                return d
+            })
+            $.when(etsyPromise, templatePromise).then(function(data, html) {
+                var templatingFn = _.template(html)
+                document.body.innerHTML = templatingFn(data)
+            })
+        },
+
+
+
+    };
+
+
+
+
+    window.EtsyClient = EtsyClient;
 
 })();
