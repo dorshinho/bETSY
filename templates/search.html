@@ -2,7 +2,8 @@
     <% results.forEach(function(value, index){ %>
         <a href="#listing/<%= value.listing_id %>" >
     <img class="pics" src="<%= value.Images[0].url_570xN %>" />
-    <%= value.title %>
+     <div class="title"><%= value.title %></div>
+    <div class="quantity"><%= value.quantity %></div>
     <div class="views">Views: <%= value.views %></div>
     <div class="price"><%= value.price %> <%= value.currency_code %></div>
         </a>
